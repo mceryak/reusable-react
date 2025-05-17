@@ -109,38 +109,6 @@ function generateAmortizationTable({ loanAmount, annualInterestRate, loanTermYea
                               (Math.pow(1 + monthlyRate, totalPayments) - 1);
   const monthlyPaymentWithExtra = baseMonthlyPayment + extraPayment;
 
-  // Helper to generate table
-  // function buildTable(paymentAmount: number) {
-  //   let balance = loanAmount;
-  //   let month = 1;
-  //   const table = [];
-
-  //   while (balance > 0) {
-  //     const interest = balance * monthlyRate;
-  //     let principal = paymentAmount - interest;
-
-  //     // Final payment adjustment
-  //     if (principal > balance) {
-  //       principal = balance;
-  //       paymentAmount = interest + principal;
-  //     }
-
-  //     balance -= principal;
-
-  //     table.push({
-  //       month,
-  //       payment: currencyFormatter.format(paymentAmount),
-  //       interestPaid: currencyFormatter.format(interest),
-  //       principalPaid: currencyFormatter.format(principal),
-  //       remainingBalance: currencyFormatter.format(balance)
-  //     });
-
-  //     month++;
-  //   }
-
-  //   return table;
-  // }
-
   let balanceS = loanAmount;
   let balanceE = loanAmount;
   let month = 1;
@@ -154,8 +122,8 @@ function generateAmortizationTable({ loanAmount, annualInterestRate, loanTermYea
     
     const interestS = balanceS * monthlyRate;
     const interestE = balanceE * monthlyRate;
-    let principalS = Math.min(baseMonthlyPayment - interestS, balanceS);
-    let principalE = Math.min(monthlyPaymentWithExtra - interestE, balanceE);
+    const principalS = Math.min(baseMonthlyPayment - interestS, balanceS);
+    const principalE = Math.min(monthlyPaymentWithExtra - interestE, balanceE);
 
     // Final payment adjustment
     // if (principal > balance) {
@@ -166,7 +134,7 @@ function generateAmortizationTable({ loanAmount, annualInterestRate, loanTermYea
     balanceS -= principalS;
     balanceE -= principalE;
 
-    let last = table.at(table.length - 1)!;
+    const last = table.at(table.length - 1)!;
     last.push({
       month,
       // payment: currencyFormatter.format(paymentAmount),

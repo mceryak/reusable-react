@@ -14,8 +14,30 @@ type Story = StoryObj<typeof MortgageCalculator>;
 
 
 
-export const FirstStory: Story = {
+export const Extra0: Story = {
   args: {
-
-  },
+    homePrice: 200_000,
+    downPayment: 30_000,
+    interestPct: 8.75,
+    termInYears: 30,
+    extraPerMonth: 0
+  }
+};
+export const Extra10: Story = {
+  args: {
+    homePrice: 200_000,
+    downPayment: 30_000,
+    interestPct: 8.75,
+    termInYears: 30,
+    extraPerMonth: 10
+  }
+};
+export const Extra100: Story = {
+  args: {
+    homePrice: 200_000,
+    downPayment: 30_000,
+    interestPct: 8.75,
+    termInYears: 30,
+    extraPerMonth: 100
+  }
 };

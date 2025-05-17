@@ -6,7 +6,6 @@ import { FaCalculator } from "react-icons/fa";
 import Accordion from "../../Accordion/Accordion";
 import SavingsSpan from "./SavingsSpan";
 import Table from "./Table";
-// import AmortizationTableYearRows from "./AmortizationTableYearRows";
 import AmortizationTable from "./AmortizationTable";
 
 
@@ -16,32 +15,32 @@ const formItems: FormItem[] = [
   { type: 'number', label: 'Interest', name: 'interestPct', required: true, postLabel: '%', step: "0.01" },
   { type: 'number', label: 'Loan Term', name: 'termInYears', required: true, postLabel: 'years' },
   { type: 'number', label: 'Extra Payment', name: 'extraPerMonth', required: true, preLabel: '$', postLabel: '/ month' },
-  // { type: 'number', label: 'Property Tax', name: 'propertyTaxYearly', preLabel: '$', postLabel: '/ year' },
-  // { type: 'number', label: 'Insurance', name: 'insuranceYearly', preLabel: '$', postLabel: '/ year' },
 ]
 
-const defaultInputs = {
-  homePrice: 150_000,
-  downPayment: 20_000,
-  interestPct: 9.0,
-  termInYears: 30,
-  extraPerMonth: 0,
-  propertyTaxYearly: 1_200,
-  insuranceYearly: 1_100
-};
+type Props = {
+  homePrice: number
+  downPayment: number
+  interestPct: number
+  termInYears: number
+  extraPerMonth: number
+  propertyTaxYearly: number
+  insuranceYearly: number
+}
 
-export default function MortgageCalculator() {
-  const [inputs, setInputs] = useState(defaultInputs);
+
+export default function MortgageCalculator({ ...defaults}: Props) {
+  console.log('defualts', defaults)
+  const [inputs, setInputs] = useState(defaults);
   const [errors, setErrors] = useState(formItems.reduce((acc, item) => ({...acc, [item.name]: '' }), {}));
 
-  const props: CalculationProps = {
-    loanAmount: defaultInputs.homePrice - defaultInputs.downPayment,
-    annualInterestRate: defaultInputs.interestPct,
-    loanTermYears: defaultInputs.termInYears,
-    extraPayment: defaultInputs.extraPerMonth
+  const calcProps: CalculationProps = {
+    loanAmount: defaults.homePrice - defaults.downPayment,
+    annualInterestRate: defaults.interestPct,
+    loanTermYears: defaults.termInYears,
+    extraPayment: defaults.extraPerMonth
   };
-  const [loanResults, setLoanResults] = useState(calculateLoan(props));
-  const [amortizationTable, setAmortizationTable] = useState(generateAmortizationTable(props));
+  const [loanResults, setLoanResults] = useState(calculateLoan(calcProps));
+  const [amortizationTable, setAmortizationTable] = useState(generateAmortizationTable(calcProps));
 
   const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -71,7 +70,7 @@ export default function MortgageCalculator() {
     setAmortizationTable(generateAmortizationTable(props));
   }
 
-  let resultColumns = inputs.extraPerMonth > 0 ? [
+  const resultColumns = inputs.extraPerMonth > 0 ? [
     { name: 'category', label: '' },
     { name: 'original', label: 'Original' },
     { name: 'withExtra', label: 'With Extra' }
